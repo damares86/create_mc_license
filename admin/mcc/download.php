@@ -1,8 +1,9 @@
 <?php
 
+$source=filter_input(INPUT_GET,"source");
 $file=filter_input(INPUT_GET,"filename");
 
-$fileList = glob('download/mini-cms-church-'.$file.'.zip');
+$fileList = glob('download/'.$source.'-'.$file.'.zip');
     foreach($fileList as $filename){
 
       if(is_file($filename)){

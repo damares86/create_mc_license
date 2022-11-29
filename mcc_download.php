@@ -1,6 +1,7 @@
 
 <?php
 $website=filter_input(INPUT_GET,"site");
+$source=filter_input(INPUT_GET,"source");
 ?>
 
 <!doctype html>
@@ -23,7 +24,7 @@ $website=filter_input(INPUT_GET,"site");
 				<div class="card mt-3 mb-5 login">
 					<div class="card-body">
 						<h3 class="my-3">Scarica Mini Cms Church</h3>
-						<h4><a href="admin/mcc/download.php?filename=<?=$website?>">Link</a>
+						<h4><a href="admin/mcc/download.php?filename=<?=$website?>&source=<?=$source?>">Link</a>
 					</div>
 				</div>
 			</div>

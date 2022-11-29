@@ -1,11 +1,11 @@
 <?php
 
-// require '../phpDebug/src/Debug/Debug.php';   			// if not using composer
+require '../phpDebug/src/Debug/Debug.php';   			// if not using composer
 
-// $debug = new \bdk\Debug(array(
-//     'collect' => true,
-//     'output' => true,
-// ));
+$debug = new \bdk\Debug(array(
+    'collect' => true,
+    'output' => true,
+));
 
 // loading class
 include("../class/Database.php");
@@ -31,14 +31,22 @@ fwrite($file_handle, '?>');
 
 chmod('wip/site.php',0777);
 
+$source="";
 
-if(copy("source/mini-cms-church.zip","wip/mini-cms-church-$website.zip")){
+foreach (glob("source/*") as $file) {
+    if( is_file($file) ){
+        $source=pathinfo($file, PATHINFO_FILENAME);
+    }
+}
+
+if(copy("source/$source.zip","wip/$source-$website.zip")){
+    
     $zip = new ZipArchive;
-    if ($zip->open("wip/mini-cms-church-$website.zip") === TRUE) {
+    if ($zip->open("wip/$source-$website.zip") === TRUE) {
         $zip->addFile('wip/site.php', 'admin/core/site.php');
         $zip->close();
-        rename("wip/mini-cms-church-$website.zip","download/mini-cms-church-$website.zip");
-        chmod("download/mini-cms-church-$website.zip",0777);
+        rename("wip/$source-$website.zip","download/$source-$website.zip");
+        chmod("download/$source-$website.zip",0777);
         unlink("wip/site.php");
 
         // insert in db
@@ -73,17 +81,8 @@ if(copy("source/mini-cms-church.zip","wip/mini-cms-church-$website.zip")){
             $output.='Website: '.$website;
             $output.='<br>';
             $output.='</body></html>';
-            
-        
-            if (mail ($to, $subject, $output, $headers)) {
-                print_r("ok");
-                exit;
-            } else {
-                print_r("ko");
-                exit;
-            }	
-
-            header("Location: ../../mcc_download.php?site=$website");
+       
+            header("Location: ../../mcc_download.php?source=$source&site=$website");
             exit;
         }else{
             header("Location: ../../mcc.php?msg=regMccErr");
